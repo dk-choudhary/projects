@@ -1,0 +1,146 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.rmi.ServerError;
+import java.util.Random;
+import java.util.Scanner;
+
+public class SereverChat {
+    static         JFrame fr = new JFrame("Server");
+    static         JPanel jp = new JPanel();
+
+    static         JButton bt = new JButton("Send");
+    static         JTextField jtf = new JTextField();
+
+    static JLabel jl1 = new JLabel();
+    static DataOutputStream dtss;
+    static DataInputStream dts;
+    static  int a=42;
+    static Scanner sc;
+
+
+    public static void main(String[] args) {
+
+        SereverChat sr = new SereverChat();
+
+        fr.setSize(400,500);
+        JLabel jl = new JLabel("Server is Running....");
+        jl.setBounds(20,0,200,50);
+        fr.add(jl);
+        fr.setLayout(null);
+
+        fr.getContentPane().setBackground(Color.GRAY);
+
+
+        jp.setBackground(Color.lightGray);
+        jp.setLayout(null);
+        jp.setBorder(null);
+        fr.add(jp);
+        //jp.setSize(200,100);
+        jp.setBounds(0,40,385,380);
+
+        jp.add(jl1);
+        fr.add(jtf);
+        jtf.setBorder(null);
+        jtf.setBounds(0,421,310,40);
+
+        fr.add(bt);
+        bt.setBounds(310,421,75,40);
+
+        fr.setVisible(true);
+
+
+        try {
+
+            ServerSocket st = new ServerSocket(8888);
+            Socket sst = st.accept();
+            System.out.println("Server is Running");
+            dts = new DataInputStream(sst.getInputStream());
+            sc = new Scanner(System.in);
+            dtss = new DataOutputStream(sst.getOutputStream());
+
+            reader();
+            write();
+           /* while(true) {
+                bt.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            String msg = jtf.getText();
+                            dtss.writeUTF(msg);
+                            jtf.setText("");
+                        }
+                        catch(Exception ee)
+                        {
+                            System.out.println(ee);
+                        }
+                    }
+                });
+
+
+    String ms = dts.readUTF();
+    System.out.println(ms);
+    jl1.setText(ms);
+    a=a+10;
+
+
+}*/
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+
+    }//main end;
+    static void write()
+    {
+        Thread tr = new Thread(()->
+        {
+
+            bt.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        String msg = jtf.getText();
+                        System.out.println(msg);
+                        dtss.writeUTF(msg);
+                        jtf.setText("");
+                    }
+                    catch(Exception ee)
+                    {
+                        System.out.println(ee);
+                    }
+                }
+            });
+
+
+        });
+        tr.start();
+
+
+
+    }
+    static void reader()
+    {
+        Thread th = new Thread(()->{
+            while(true) {
+                try {
+                    String ms = dts.readUTF();
+                    System.out.println(ms);
+                    jl1.setText(ms);
+                    jl1.setBounds(0,a,200,20);
+                    a = a + 20;
+                } catch (Exception r) {
+                    System.out.println(r);
+                }
+            }
+        });
+        th.start();
+    }
+}//public class end;
