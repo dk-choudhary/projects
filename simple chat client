@@ -1,0 +1,114 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+
+
+
+
+public class Simpleclintchat {
+
+    static JTextField jtc = new JTextField(15);
+    static Socket s;
+    static   JTextField jpec = new JTextField(15);
+    static   JButton Ln = new JButton(" send msg");
+    static DataOutputStream dtsss;
+    static DataInputStream dtas;
+    public static void main(String[] args) {
+        JFrame Fc = new JFrame("Clint frame");
+        Fc.setSize(600, 600);
+        Fc.setLayout(null);
+        Fc.getContentPane().setBackground(Color.GRAY);
+        JLabel name = new JLabel("from server  :");
+        name.setBounds(100, 70, 150, 30);
+
+        jtc.setBounds(250, 70, 250, 30);
+        JLabel Email = new JLabel(" to server  :");
+        Email.setBounds(100, 100, 150, 30);
+
+        jpec.setBounds(250, 100, 250, 30);
+        JButton Ln = new JButton(" send msg");
+        Ln.setBounds(200, 170, 200, 30);
+        Fc.add(name);
+        Fc.add(jtc);
+        Fc.add(Email);
+        Fc.add(jpec);
+        Fc.add(Ln);
+
+
+        try {
+            s = new Socket("localhost", 5599);
+            System.out.println(" connect to the server ");
+
+            Fc.setVisible(true);
+            dtas = new DataInputStream(s.getInputStream());
+
+            dtsss = new DataOutputStream(s.getOutputStream());
+
+
+            //    writer1();
+            reader();
+
+
+        } catch (Exception ff) {
+
+        }
+        Fc.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+
+        Ln.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String msg = jpec.getText();
+                System.out.println(msg);
+                try {
+                    dtsss.writeUTF(msg);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                jpec.setText("");
+
+
+            }
+
+        });
+    }
+
+    static void writer1()
+    {
+        Thread trc = new Thread(()->
+        {
+
+
+        });
+        trc.start();
+
+
+
+    }
+
+    static void reader()
+    {
+        Thread th = new Thread(()->{
+            while(true) {
+                try {
+                    String ms = dtas.readUTF();
+                    System.out.println(ms);
+                    jtc.setText(ms);
+
+
+                } catch (Exception r) {
+                    System.out.println(r);
+                }
+            }
+        });
+        th.start();
+    }
+
+
+}
