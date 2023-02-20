@@ -1,0 +1,91 @@
+
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.*;
+
+public class RockPaper extends JFrame implements ActionListener {
+
+        private JButton rockButton, paperButton, scissorsButton;
+        private JTextField textField, textField2;
+
+        public static void main(String[] args) {
+            RockPaper paper = new RockPaper();
+            paper.setSize(600,600);
+            paper.createGUI();/*www.j  av  a 2s  .  co m*/
+            paper.show();
+        }
+
+        private void createGUI() {
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            Container window = getContentPane();
+            window.setLayout(null);
+
+
+            textField = new JTextField(15);
+            window.add(textField);
+            textField.setBounds(100,100,400,50);
+
+            textField2 = new JTextField(15);
+            window.add(textField2);
+textField2.setBounds(100,160,400,50);
+            rockButton = new JButton("Rock");
+            window.add(rockButton);
+            rockButton.setBounds(200,230,200,100);
+            rockButton.addActionListener(this);
+
+            paperButton = new JButton("Paper");
+            window.add(paperButton);
+            paperButton.setBounds(100,350,200,100);
+            paperButton.addActionListener(this);
+
+            scissorsButton = new JButton("Scissors");
+            window.add(scissorsButton);
+            scissorsButton.setBounds(300,350,200,100);
+            scissorsButton.addActionListener(this);
+
+        }
+
+        public void actionPerformed(ActionEvent event) {
+            Object source = event.getSource();
+            int playerChoice;
+            int compChoice;
+            String winner;
+            Random randomSeed = new Random();
+            if (source == rockButton) {
+                playerChoice = 0;
+            }
+            else if (source == paperButton){
+                playerChoice = 1;
+            } else {
+                playerChoice = 2;
+            }
+            compChoice = randomSeed.nextInt(3);
+            winner = findWinner(playerChoice, compChoice);
+            textField.setText("Winner is " + winner + "!");
+
+            if (compChoice == 0) {
+                textField2.setText("Computer choice is rock");
+            } else if (compChoice == 1) {
+                textField2.setText("Computer choice is paper");
+            } else {
+                textField2.setText("Computer choice is scissors");
+            }
+
+        }
+        private String findWinner(int playerChoice, int compChoice) {
+            String winner;
+            if (playerChoice == compChoice) {
+                winner = "Noone, it's a tie";
+            } else if (playerChoice == 0 && compChoice == 1) {
+                winner = "player";
+            } else if (playerChoice == 1 && compChoice == 2) {
+                winner = "Computer";
+            } else if (playerChoice == 2 && compChoice == 0) {
+                winner = "Computer";
+            } else {
+                winner = "Player";
+            } return winner;
+        }
+    }
