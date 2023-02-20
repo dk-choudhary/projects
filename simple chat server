@@ -1,0 +1,133 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+
+public class simpleserverchat {
+    static JTextField jt = new JTextField(15);
+    static Socket s;
+    static   JTextField jpe = new JTextField(15);
+    static   JButton Ln = new JButton(" send msg");
+    static DataOutputStream dtss;
+    static DataInputStream dts;
+
+    public static void main(String[] args) throws IOException {
+        JFrame frame = new JFrame("Server");
+        frame.setSize(600, 600);
+        frame.setLayout(null);
+        frame.getContentPane().setBackground(Color.cyan);
+        JLabel msgc = new JLabel("from clint  :");
+        msgc.setBounds(100, 70, 150, 30);
+
+        jt.setBounds(250, 70, 250, 30);
+        JLabel Email = new JLabel(" to clint  :");
+        Email.setBounds(100, 100, 150, 30);
+
+        jpe.setBounds(250, 100, 250, 30);
+
+        Ln.setBounds(200, 170, 200, 30);
+        frame.add(msgc);
+        frame.add(jt);
+        frame.add(Email);
+        frame.add(jpe);
+        frame.add(Ln);
+
+
+
+        try {
+            ServerSocket ss = new ServerSocket(5599);
+            System.out.println("server is running....");
+            s = ss.accept();
+
+            frame.setVisible(true);
+            dts = new DataInputStream(s.getInputStream());
+
+            dtss = new DataOutputStream(s.getOutputStream());
+
+
+            write();
+            reader();
+
+
+        }catch (Exception ff){
+
+        }      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+    }
+    static void write()
+    {
+        Thread tr = new Thread(()->
+        {
+            System.out.println("Start");
+            Ln.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+
+                        String msg = jpe.getText();
+                        System.out.println(msg);
+                        dtss.writeUTF(msg);
+                        jpe.setText("");
+                    }
+                    catch(Exception ee)
+                    {
+                        System.out.println(ee);
+                    }
+                }
+            });
+
+            System.out.println("End");
+        });
+        tr.start();
+
+
+
+    }
+    static void reader()
+    {
+        Thread th = new Thread(()->{
+            while(true) {
+                try {
+                    String ms = dts.readUTF();
+                    System.out.println(ms);
+                    jt.setText(ms);
+
+
+                } catch (Exception r) {
+                    System.out.println(r);
+                }
+            }
+        });
+        th.start();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
