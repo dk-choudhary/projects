@@ -1,0 +1,107 @@
+import javax.swing.*;
+import java.util.Enumeration;
+
+public class Ui {
+
+    static int ip=0;
+static  int score=0;
+  static   String []question={
+            "\"Question 1 of 15:" +"What is a correct syntax to output \\\"Hello World\\\" in Java?\\n",
+           " Question 2 of 15:Java is short for Javascript","Question 3 of 15: How do you insert COMMENTS in Java code?",
+            "Question 4 of 15: Which data type is used to create a variable that should store text?",
+            "Question 5 of 15: how do you create a variable with the numeric value 5?"
+
+    };
+  static  String aq[]={"echo(\\\"Hello World\\\")","true","#This is a comment","String"," num x = 5"
+
+  };
+  static  String bq[]= {
+" Console.WriteLine(\\\"Hello World\\\")","false"," // This is a comment.", "myString"," x = 5"
+  };
+  static String cq[]= {
+"System.out.println(\\\"Hello World\\\")","All of the above.","/* This is a comment","string","float x = 5;\\"
+  };static  String dq[]={
+"print(\\\"Hello World\\\")","None of the above."," All of the above.","Txt","int x = 5;"
+    };
+  static  String ans[]={"C","B","B","A","D"
+  };
+    public static void main(String[] args) {
+
+        JFrame jf =new JFrame("JAVA QUIZ");
+        jf.setLayout(null);
+        jf.setSize(600,800);
+
+
+        JLabel jq=new JLabel(" ");
+        jq.setBounds(10,20,560,40);
+        jf.add(jq);
+JRadioButton a=new JRadioButton("A");
+        JRadioButton b=new JRadioButton("B");
+        JRadioButton c=new JRadioButton("C");
+        JRadioButton d=new JRadioButton("D");
+a.setBounds(10,70,200,30);
+b.setBounds(250,70,200,30);
+a.setActionCommand("A");
+b.setActionCommand("B");
+c.setActionCommand("C");
+d.setActionCommand("D");
+        c.setBounds(10,120,200,30);
+        d.setBounds(250,120,200,30);
+        ButtonGroup bg=new ButtonGroup();
+        bg.add(a);bg.add(b);bg.add(c);bg.add(d);
+        jf.add(a);jf.add(b);jf.add(c);jf.add(d);
+        JButton submit=new JButton("SUBMIT");
+        JButton next=new JButton("NEXT");
+        submit.setBounds(100,200,200,40);
+        next.setBounds(300,200,200,40);
+        JLabel jr=new JLabel(" ");
+        jr.setBounds(250,300,100,40);
+        jf.add(jr);
+        jr.setVisible(false);
+jq.setVisible(false);
+a.setVisible(false);
+b.setVisible(false);
+
+c.setVisible(false);
+d.setVisible(false);
+next.setText("START QUIZ");
+submit.setVisible(false);
+        next.addActionListener(e->{
+            jq.setVisible(true);
+            a.setVisible(true);
+            b.setVisible(true);
+            c.setVisible(true);
+            d.setVisible(true);
+next.setText("NEXT");
+            submit.setVisible(true);
+            if(ip==5){ ip++;
+                if(bg.getSelection()!=null)
+                    System.out.println(""+  bg.getSelection().getActionCommand());
+
+                if( bg.getSelection().getActionCommand().equals(ans[(ip-2)])) {
+                    score++;
+                }
+                jr.setVisible(true);
+                jr.setText("your score is :  "+score);
+            }
+       if(ip<5) {
+
+           jq.setText(question[ip]);
+           a.setText(aq[ip]);
+           b.setText(bq[ip]);
+           c.setText(cq[ip]);
+           d.setText(dq[ip]);
+           if (bg.getSelection() != null){
+               System.out.println("" + bg.getSelection().getActionCommand());
+           if( bg.getSelection().getActionCommand().equals(ans[(ip-1)]) ){
+               score++;
+           }}
+           ip++;
+       }
+
+
+        });
+        jf.add(submit);jf.add(next);
+        jf.setVisible(true);
+    }
+}
